@@ -29,7 +29,7 @@ def threader():
 # Create the queue and threader
 q = Queue()
 
-# how many threads are we going to allow for
+# how many threads are we going to allow for? ten for now.
 for x in range(10):
      t = threading.Thread(target=threader)
 
