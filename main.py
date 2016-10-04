@@ -1,25 +1,56 @@
 '''
-Practice multiprocessing.  Run under python 2.x; not guaranteed to work under python 3.x
+Cribbed threading code from https://pythonprogramming.net/threading-tutorial-python/
 '''
 
-import multiprocessing as mp
+import threading, time
+from queue import Queue
+from googleAPI import *
 
-def washer(dishes, output):
-    for dish in dishes:
-        print('Washing ' + dish + ' dish')
-        output.put(dish)
+print_lock = threading.Lock()
 
-def dryer(input):
+def exampleJob(worker):
+    time.sleep(.5) # pretend to do some work.
+    with print_lock:
+        # try to call another function inside exampleJob
+        googleAPI(threading.current_thread().name,worker)
+
+# The threader thread pulls an worker from the queue and processes it
+def threader():
     while True:
-        dish = input.get()
-        print('Drying ' +  dish + ' dish')
-        input.task_done()
+        # gets an worker from the queue
+        worker = q.get()
 
-dish_queue = mp.JoinableQueue()
-dryer_proc = mp.Process(target=dryer, args=(dish_queue,))
-dryer_proc.daemon = True
-dryer_proc.start()
+        # Run the example job with the avail worker in queue (thread)
+        exampleJob(worker)
 
-dishes = ['salad', 'bread', 'entree', 'dessert', 'pho bowl']
-washer(dishes,dish_queue)
-dish_queue.join()
+        # completed with the job
+        q.task_done()
+
+# Create the queue and threader
+q = Queue()
+
+# how many threads are we going to allow for
+for x in range(10):
+     t = threading.Thread(target=threader)
+
+     # classifying as a daemon, so they will die when the main dies
+     t.daemon = True
+
+     # begins, must come after daemon definition
+     t.start()
+
+# record our start time
+start = time.time()
+
+# set up worker objects for googleAPI to process
+items=[("one",1),"two","three","eins","zwei","drei","un","deux","trois","ena","dio","treis"]
+# and queue them up for the 10 threads we set up
+for worker in items:
+    q.put(worker)
+
+# wait until the thread terminates.
+q.join()
+
+# with 10 workers and 20 tasks, with each task being .5 seconds, then the completed job
+# is ~1 second using threading. Normally 20 tasks with .5 seconds each would take 10 seconds.
+print('Entire job took:',time.time() - start)
