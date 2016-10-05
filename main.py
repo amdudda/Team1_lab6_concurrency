@@ -5,6 +5,7 @@ Cribbed threading code from https://pythonprogramming.net/threading-tutorial-pyt
 import threading, time
 from queue import Queue
 from googleAPI import *
+import apikeys as AK
 
 print_lock = threading.Lock()
 
@@ -12,7 +13,7 @@ def exampleJob(worker):
     time.sleep(.5) # pretend to do some work.
     with print_lock:
         # try to call another function inside exampleJob
-        googleAPI(threading.current_thread().name,worker)
+        googleAPI(*worker)
 
 # The threader thread pulls an worker from the queue and processes it
 def threader():
@@ -43,7 +44,7 @@ for x in range(10):
 start = time.time()
 
 # set up worker objects for googleAPI to process
-items=[("one",1),"two","three","eins","zwei","drei","un","deux","trois","ena","dio","treis"]
+items=[("HONY",AK.GCS_ID_HONY),("Bustos", AK.GCS_ID_BUSTOS)]
 # and queue them up for the 10 threads we set up
 for worker in items:
     q.put(worker)

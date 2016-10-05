@@ -1,4 +1,5 @@
 # this will eventually be totally recoded to run Google API stuff
+from apikeys import *
 
-def googleAPI(thread_name,wrk):
-    print(thread_name,wrk)
+def googleAPI(sitename, googleCustomSearchID, searchTerm = G_SEARCH_STRING, apikey = G_API_KEY):
+    print(sitename,googleCustomSearchID)
