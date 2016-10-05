@@ -8,12 +8,15 @@ from googleAPI import *
 import apikeys as AK
 
 print_lock = threading.Lock()
+result_array=[]
 
 def exampleJob(worker):
-    time.sleep(.5) # pretend to do some work.
+    imageurl = googleAPI(*worker)
     with print_lock:
         # try to call another function inside exampleJob
-        googleAPI(*worker)
+        print(imageurl)
+        result_array.append(imageurl)
+
 
 # The threader thread pulls an worker from the queue and processes it
 def threader():
@@ -54,4 +57,5 @@ q.join()
 
 # with 10 workers and 20 tasks, with each task being .5 seconds, then the completed job
 # is ~1 second using threading. Normally 20 tasks with .5 seconds each would take 10 seconds.
-print('Entire job took:',time.time() - start)
+print(result_array)
+# print('Entire job took:',time.time() - start)
