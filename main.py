@@ -1,5 +1,6 @@
 '''
 Cribbed threading code from https://pythonprogramming.net/threading-tutorial-python/
+Modified threading code for use in this project.
 '''
 
 import threading, time
@@ -47,7 +48,7 @@ for x in range(10):
 start = time.time()
 
 # set up worker objects for googleAPI to process
-items=[("HONY",AK.GCS_ID_HONY),("Bustos", AK.GCS_ID_BUSTOS)]
+items=[("HONY",AK.GCS_ID_HONY),("Bustos", AK.GCS_ID_BUSTOS),("Pixabay",AK.GCS_ID_PIXABAY)]
 # and queue them up for the 10 threads we set up
 for worker in items:
     q.put(worker)
