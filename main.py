@@ -7,6 +7,7 @@ import threading, time
 from queue import Queue
 from googleAPI import *
 import apikeys as AK
+from storePics import savePic
 
 print_lock = threading.Lock()
 result_array=[]
@@ -17,6 +18,8 @@ def exampleJob(worker):
         # try to call another function inside exampleJob
         print(imageurl)
         result_array.append(imageurl)
+        savePic(imageurl[1])
+
 
 
 # The threader thread pulls an worker from the queue and processes it
