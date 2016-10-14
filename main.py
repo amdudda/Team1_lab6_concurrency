@@ -13,12 +13,12 @@ print_lock = threading.Lock()
 result_array=[]
 
 def downloadImages(worker):
-    imageurl = googleAPI(*worker)
+    imageurl = googleAPI(*worker)  # the asterisk unpacks the tuple into a list of arguments
     with print_lock:
         # try to call another function inside exampleJob
         print(imageurl)
         result_array.append(imageurl)
-        savePic(imageurl[1])
+        savePic(*imageurl)
 
 
 
