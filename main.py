@@ -12,7 +12,7 @@ from storePics import savePic
 print_lock = threading.Lock()
 result_array=[]
 
-def exampleJob(worker):
+def downloadImages(worker):
     imageurl = googleAPI(*worker)
     with print_lock:
         # try to call another function inside exampleJob
@@ -29,7 +29,7 @@ def threader():
         worker = q.get()
 
         # Run the example job with the avail worker in queue (thread)
-        exampleJob(worker)
+        downloadImages(worker)
 
         # completed with the job
         q.task_done()
